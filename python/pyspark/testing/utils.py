@@ -155,6 +155,7 @@ def eventually(
 
         @functools.wraps(condition)
         def wrapper(*args: Any, **kwargs: Any) -> Any:
+            __tracebackhide__ = True
             start_time = time()
             lastValue = None
             numTries = 0

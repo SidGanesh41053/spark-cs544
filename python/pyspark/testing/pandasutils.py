@@ -62,6 +62,7 @@ def _assert_pandas_equal(
                 **kwargs,
             )
         except AssertionError:
+            __tracebackhide__ = True
             raise PySparkAssertionError(
                 errorClass="DIFFERENT_PANDAS_DATAFRAME",
                 messageParameters={
@@ -82,6 +83,7 @@ def _assert_pandas_equal(
                 **kwargs,
             )
         except AssertionError:
+            __tracebackhide__ = True
             raise PySparkAssertionError(
                 errorClass="DIFFERENT_PANDAS_SERIES",
                 messageParameters={
@@ -95,6 +97,7 @@ def _assert_pandas_equal(
         try:
             assert_index_equal(left, right, check_exact=checkExact)
         except AssertionError:
+            __tracebackhide__ = True
             raise PySparkAssertionError(
                 errorClass="DIFFERENT_PANDAS_INDEX",
                 messageParameters={
@@ -105,6 +108,7 @@ def _assert_pandas_equal(
                 },
             )
     else:
+        __tracebackhide__ = True
         raise ValueError("Unexpected values: (%s, %s)" % (left, right))
 
 
@@ -135,6 +139,7 @@ def _assert_pandas_almost_equal(
 
     if isinstance(left, pd.DataFrame) and isinstance(right, pd.DataFrame):
         if left.shape != right.shape:
+            __tracebackhide__ = True
             raise PySparkAssertionError(
                 errorClass="DIFFERENT_PANDAS_DATAFRAME",
                 messageParameters={
@@ -146,6 +151,7 @@ def _assert_pandas_almost_equal(
             )
         for lcol, rcol in zip(left.columns, right.columns):
             if lcol != rcol:
+                __tracebackhide__ = True
                 raise PySparkAssertionError(
                     errorClass="DIFFERENT_PANDAS_DATAFRAME",
                     messageParameters={
@@ -157,6 +163,7 @@ def _assert_pandas_almost_equal(
                 )
             for lnull, rnull in zip(left[lcol].isnull(), right[rcol].isnull()):
                 if lnull != rnull:
+                    __tracebackhide__ = True
                     raise PySparkAssertionError(
                         errorClass="DIFFERENT_PANDAS_DATAFRAME",
                         messageParameters={
@@ -168,6 +175,7 @@ def _assert_pandas_almost_equal(
                     )
             for lval, rval in zip(left[lcol].dropna(), right[rcol].dropna()):
                 if not compare_vals_approx(lval, rval):
+                    __tracebackhide__ = True
                     raise PySparkAssertionError(
                         errorClass="DIFFERENT_PANDAS_DATAFRAME",
                         messageParameters={
@@ -178,6 +186,7 @@ def _assert_pandas_almost_equal(
                         },
                     )
         if left.columns.names != right.columns.names:
+            __tracebackhide__ = True
             raise PySparkAssertionError(
                 errorClass="DIFFERENT_PANDAS_DATAFRAME",
                 messageParameters={
@@ -189,6 +198,7 @@ def _assert_pandas_almost_equal(
             )
     elif isinstance(left, pd.Series) and isinstance(right, pd.Series):
         if left.name != right.name or len(left) != len(right):
+            __tracebackhide__ = True
             raise PySparkAssertionError(
                 errorClass="DIFFERENT_PANDAS_SERIES",
                 messageParameters={
@@ -200,6 +210,7 @@ def _assert_pandas_almost_equal(
             )
         for lnull, rnull in zip(left.isnull(), right.isnull()):
             if lnull != rnull:
+                __tracebackhide__ = True
                 raise PySparkAssertionError(
                     errorClass="DIFFERENT_PANDAS_SERIES",
                     messageParameters={
@@ -211,6 +222,7 @@ def _assert_pandas_almost_equal(
                 )
         for lval, rval in zip(left.dropna(), right.dropna()):
             if not compare_vals_approx(lval, rval):
+                __tracebackhide__ = True
                 raise PySparkAssertionError(
                     errorClass="DIFFERENT_PANDAS_SERIES",
                     messageParameters={
@@ -222,6 +234,7 @@ def _assert_pandas_almost_equal(
                 )
     elif isinstance(left, pd.MultiIndex) and isinstance(right, pd.MultiIndex):
         if len(left) != len(right):
+            __tracebackhide__ = True
             raise PySparkAssertionError(
                 errorClass="DIFFERENT_PANDAS_MULTIINDEX",
                 messageParameters={
@@ -233,6 +246,7 @@ def _assert_pandas_almost_equal(
             )
         for lval, rval in zip(left, right):
             if not compare_vals_approx(lval, rval):
+                __tracebackhide__ = True
                 raise PySparkAssertionError(
                     errorClass="DIFFERENT_PANDAS_MULTIINDEX",
                     messageParameters={
@@ -244,6 +258,7 @@ def _assert_pandas_almost_equal(
                 )
     elif isinstance(left, pd.Index) and isinstance(right, pd.Index):
         if len(left) != len(right):
+            __tracebackhide__ = True
             raise PySparkAssertionError(
                 errorClass="DIFFERENT_PANDAS_INDEX",
                 messageParameters={
@@ -255,6 +270,7 @@ def _assert_pandas_almost_equal(
             )
         for lnull, rnull in zip(left.isnull(), right.isnull()):
             if lnull != rnull:
+                __tracebackhide__ = True
                 raise PySparkAssertionError(
                     errorClass="DIFFERENT_PANDAS_INDEX",
                     messageParameters={
@@ -266,6 +282,7 @@ def _assert_pandas_almost_equal(
                 )
         for lval, rval in zip(left.dropna(), right.dropna()):
             if not compare_vals_approx(lval, rval):
+                __tracebackhide__ = True
                 raise PySparkAssertionError(
                     errorClass="DIFFERENT_PANDAS_INDEX",
                     messageParameters={
@@ -277,6 +294,7 @@ def _assert_pandas_almost_equal(
                 )
     else:
         if not isinstance(left, (pd.DataFrame, pd.Series, pd.Index)):
+            __tracebackhide__ = True
             raise PySparkAssertionError(
                 errorClass="INVALID_TYPE_DF_EQUALITY_ARG",
                 messageParameters={
@@ -288,6 +306,7 @@ def _assert_pandas_almost_equal(
                 },
             )
         elif not isinstance(right, (pd.DataFrame, pd.Series, pd.Index)):
+            __tracebackhide__ = True
             raise PySparkAssertionError(
                 errorClass="INVALID_TYPE_DF_EQUALITY_ARG",
                 messageParameters={
@@ -400,6 +419,7 @@ class PandasOnSparkTestUtils:
                 return False
 
             if not isinstance(left, (DataFrame, Series, Index)):
+                __tracebackhide__ = True
                 raise PySparkAssertionError(
                     errorClass="INVALID_TYPE_DF_EQUALITY_ARG",
                     messageParameters={
@@ -412,6 +432,7 @@ class PandasOnSparkTestUtils:
             elif not isinstance(
                 right, (DataFrame, pd.DataFrame, Series, pd.Series, Index, pd.Index)
             ):
+                __tracebackhide__ = True
                 raise PySparkAssertionError(
                     errorClass="INVALID_TYPE_DF_EQUALITY_ARG",
                     messageParameters={
@@ -619,4 +640,5 @@ def assert_produces_warning(
             msg = "Did not see expected warning of class {}".format(repr(expected_warning.__name__))
             assert saw_warning, msg
         if raise_on_extra_warnings and extra_warnings:
+            __tracebackhide__ = True
             raise AssertionError("Caused unexpected warning(s): {}".format(repr(extra_warnings)))
