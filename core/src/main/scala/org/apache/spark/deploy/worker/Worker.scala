@@ -472,7 +472,7 @@ private[deploy] class Worker(
       resources))
   }
 
-  private def handleRegisterResponse(msg: RegisterWorkerResponse): Unit = synchronized {
+  private def handleRegisterResponse(msg: RegisterWorkerResponse): Unit = {
     msg match {
       case RegisteredWorker(masterRef, masterWebUiUrl, masterAddress, duplicate) =>
         val preferredMasterAddress = if (preferConfiguredMasterAddress) {
@@ -520,7 +520,7 @@ private[deploy] class Worker(
     }
   }
 
-  override def receive: PartialFunction[Any, Unit] = synchronized {
+  override def receive: PartialFunction[Any, Unit] = {
     case msg: RegisterWorkerResponse =>
       handleRegisterResponse(msg)
 
